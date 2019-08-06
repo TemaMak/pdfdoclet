@@ -14,7 +14,7 @@ public class ModuleWriter extends BaseWriter {
 
 
     public static void writeModuleHeader(Document document, ModuleElement element, DocTrees docTrees){
-        Paragraph pageTitle = new Paragraph(String.valueOf(element.getSimpleName()), pageTitleFont);
+        Paragraph pageTitle = new Paragraph("Module: " + String.valueOf(element.getSimpleName()), pageTitleFont);
         try {
             document.add(pageTitle);
         } catch (DocumentException e) {
@@ -25,9 +25,14 @@ public class ModuleWriter extends BaseWriter {
         List<? extends DocTree> tags = docCommentTree.getBlockTags();
         for(DocTree tag: tags){
             final String tagOriginal = tag.toString();
-            String[] parsedTag = tagOriginal.split(" ");
+            String[] parsedTag = tagOriginal.split(" ",2);
+            String tagHead = parsedTag[0];
+            String tagBody = parsedTag[1];
+
+            if(tagHead.contains("mavenArtefactID")){
+                TagWriter.writeTag(document,tagHead,tagBody);
+            }
         }
-        Paragraph usageTitle = new Paragraph("Maven usage", subTitleFont);
     }
 
 }
